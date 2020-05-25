@@ -9,23 +9,24 @@ CREATE TABLE IF NOT EXISTS Admin(
     );
 
 CREATE TABLE IF NOT EXISTS cab_details(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     cab_number TEXT NOT NULL,
-    seats_capacity INTEGER NOT NULL,
-    seats_available INTEGER,
+    seat_capacity INTEGER NOT NULL,
+    seat_available INTEGER,
     route TEXT NOT NULL,
     timing TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS employee_details(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
     password TEXT NOT NULL,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    active INTEGER DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS travel_log(
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     employee_id INT NOT NULL,
     cab_id INT NOT NULL,
     trip_date STRING NOT NULL,
