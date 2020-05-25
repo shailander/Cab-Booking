@@ -42,13 +42,13 @@ class Admin():
         print('Employee Booking')
 
     def add_cab(self):
-        # cab_number = input('Enter cab number')
-        # while True:
-        #     try:
-        #         seats_available = int(input('Enter the seats capacity: '))
-        #         break
-        #     except:
-        #         print("\n***Only numbers are allowed***\n")
+        cab_number = input('Enter cab number')
+        while True:
+            try:
+                seats_available = int(input('Enter the seats capacity: '))
+                break
+            except:
+                print("\n***Only numbers are allowed***\n")
         locations={1 :"Koramangala", 2:"HSR", 3:"Bellandur", 4:"Electronic City", 5:"Sarjapur"}
         for item, value in locations.items():
             print(f"{item} : {value}")
@@ -63,6 +63,12 @@ class Admin():
         for item in route_num_list :
             route += ":"+locations[item]
         print(route[1:])
+        time = input('Enter the running time(24hrs, HH:mm format) of the cab comma(,) seperated: ')
+        time_list = time.split(',')
+        timing = ""
+        for item in time_list :
+            timing += "-"+item
+        print(timing[1:])
 
 
 
