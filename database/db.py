@@ -193,7 +193,7 @@ class Database:
         start_trip_task = Timer(10, self.start_trip, [id, source, destination, booking_id])
         start_trip_task.start()
 
-    def start_trip(self, id, source, destination, booking_id):
+    def start_trip(self, cab_id, source, destination, booking_id):
         self.conn = sqlite3.connect('database.db')
         self.cursor = self.conn.cursor()
         sql_query = f"""SELECT * FROM travel_log WHERE id='{booking_id}' AND status LIKE 'cancelled'"""
@@ -206,29 +206,44 @@ class Database:
         if cancelled_status:
             return
 
-        sql_query = f"""UPDATE travel_log SET status = 'started' WHERE
-                                id = {id} AND status LIKE 'upcoming'"""
-        self.cursor.execute(sql_query)
+        sql_query2 = f"""UPDATE travel_log SET status = 'started' WHERE
+                                id = {booking_id} AND status LIKE 'upcoming'"""
+        self.cursor.execute(sql_query2)
         self.conn.commit()
 
-        sql_query = f"""SELECT time FROM trip_time WHERE
+        sql_query3 = f"""SELECT time FROM trip_time WHERE
                                 source LIKE '{source}' AND destination LIKE '{destination}' OR
                                 source LIKE '{destination}' AND destination LIKE '{source}'"""
-        self.cursor.execute(sql_query)
+        self.cursor.execute(sql_query3)
         result = self.cursor.fetchall()
         time = [value[0] for value in result]
         trip_time_seconds = time[0] * 60
 
         # end_trip_task = Timer(trip_time_seconds, self.start_trip, [str(id), source, destination])
         # For demonstration purpose using 10 seconds till the trip ends
-        end_trip_task = Timer(10, self.end_trip, [id])
+        end_trip_task = Timer(10, self.end_trip, [booking_id, cab_id])
         end_trip_task.start()
 
-    def end_trip(self, id):
+    def end_trip(self, booking_id, cab_id):
         self.conn = sqlite3.connect('database.db')
         self.cursor = self.conn.cursor()
         sql_query = f"""UPDATE travel_log SET status = 'ended' WHERE
-                                id = '{id}' AND status LIKE 'started'"""
+                                id = '{booking_id}' AND status LIKE 'started'"""
         self.cursor.execute(sql_query)
         self.conn.commit()
+
+        sql_query2 = f"""SELECT seat_available FROM cab_details
+                                WHERE id = '{cab_id}'"""
+        self.cursor.execute(sql_query2)
+        result = self.cursor.fetchall()
+        seat_count = [value[0] for value in result]
+        seat_count_updated = seat_count[0] + 1
+        sql_query3 = f"""UPDATE cab_details SET seat_available = '{seat_count_updated}'
+                                WHERE id = '{cab_id}'"""
+        self.cursor.execute(sql_query3)
+        self.conn.commit()
+
+
+
+
 

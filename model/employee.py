@@ -8,7 +8,7 @@ class Employee():
         self.user = user
 
     def login(self):
-        username = "rohit123"
+        username = "adarsh123"
         password = "123"
         dict = {'username': username, 'password': password}
         access = self.db.validate_credentials(dict, "employee_details")
@@ -55,7 +55,7 @@ class Employee():
             return
         source = locations[source_input]
         destination = locations[destination_input]
-        time_input = input('Enter time: ')
+        time_input = input('Enter time(24 hours format): ')
         t1 = datetime.strptime(time_input, '%H:%M')
         current_time = datetime.now()
         current_time_string = current_time.strftime("%H:%M")
@@ -90,7 +90,7 @@ class Employee():
 
         #Function waiting for trip to start
         trip_start_time = (t1 - t2).total_seconds()
-        self.db.schedule_trip(trip_start_time, id, source, destination, booking_id)
+        self.db.schedule_trip(trip_start_time, cab_id_input, source, destination, booking_id)
 
     def filter_cab_by_timings(self, cabs_list, time_input) :
         if cabs_list == [] :
