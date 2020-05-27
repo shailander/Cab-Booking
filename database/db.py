@@ -27,7 +27,7 @@ class Database:
 
     def validate_credentials(self, dict, table_name):
         sql_query = f"SELECT * FROM {table_name} WHERE username='{dict['username']}'" \
-                    f" AND password='{dict['password']}' "
+                    f" AND password='{dict['password']}' AND active = 1 "
         self.cursor.execute(sql_query)
         result = self.cursor.fetchall()
         if not result:

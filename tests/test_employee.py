@@ -22,7 +22,7 @@ class EmployeeTest(unittest.TestCase):
         self.employee.db.validate_credentials.return_value = True
         self.employee.db.get_name.return_value = "Admin"
         self.employee.db.get_id.return_value = 1
-        mock_input.side_effect = ("5", "1", "2", "3", "4")
+        mock_input.side_effect = ("username", "password", "5", "1", "2", "3", "4")
         self.employee.login()
         mock_booking_cab.assert_called_once()
         mock_booking_history.assert_called_once()

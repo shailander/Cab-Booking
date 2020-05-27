@@ -10,10 +10,8 @@ class Admin:
         self.employee = Employee(db, user)
 
     def login(self):
-        # username = input("Enter username: ")
-        # password = input("Enter password: ")
-        username = "admin123"
-        password = "password"
+        username = input("Enter username: ")
+        password = input("Enter password: ")
         dict = {'username': username, 'password': password}
         access = self.db.validate_credentials(dict, "Admin")
         if not access:

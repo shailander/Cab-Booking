@@ -24,7 +24,7 @@ class AdminTest(unittest.TestCase):
 
         self.admin.db.validate_credentials.return_value = True
         self.admin.db.get_name.return_value = "Admin"
-        mock_input.side_effect = ("1","2","3","4","5","7","6")
+        mock_input.side_effect = ("username", "password", "1", "2", "3", "4", "5", "7", "6")
         self.admin.login()
         mock_check_total_booking.assert_called_once()
         mock_check_employee_booking.assert_called_once()

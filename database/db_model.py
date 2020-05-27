@@ -2,6 +2,7 @@ RECORD_TABLE = """
 
 CREATE TABLE IF NOT EXISTS Admin(
     id INTEGER DEFAULT 1,
+    active INTEGER DEFAULT 1,
     username TEXT NOT NULL,
     password TEXT NOT NULL,
     name TEXT NOT NULL,

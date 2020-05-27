@@ -8,8 +8,8 @@ class Employee():
         self.user = user
 
     def login(self):
-        username = "adarsh123"
-        password = "123"
+        username = input('Enter username: ')
+        password = input('Enter password: ')
         dict = {'username': username, 'password': password}
         access = self.db.validate_credentials(dict, "employee_details")
         if not access:
