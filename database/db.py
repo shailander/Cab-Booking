@@ -1,8 +1,6 @@
 import sqlite3
 from sqlite3 import Error
 from database.db_model import RECORD_TABLE
-# import datetime
-
 
 class Database:
     def __init__(self):
@@ -43,6 +41,14 @@ class Database:
         name = [value[0] for value in result]
         return name[0]
 
+    def get_id(self, dict, table_name):
+        sql_query = f"SELECT id FROM {table_name} WHERE username='{dict['username']}'" \
+                    f" AND password='{dict['password']}' "
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        name = [value[0] for value in result]
+        return name[0]
+
     def insert_cab_deatils(self, dict):
         sql_query = f"INSERT INTO cab_details ('cab_number','seat_capacity','seat_available','route'," \
                     f"'timing') VALUES ('{dict['cab_number']}','{dict['seat_capacity']}'," \
@@ -71,3 +77,89 @@ class Database:
                     f"VALUES ('{dict['name']}','{dict['username']}','{dict['password']}')"
         self.cursor.execute(sql_query)
         self.conn.commit()
+
+    def validate_employee_existence(self, id):
+        sql_query=f"SELECT * FROM employee_details WHERE id = {id} AND active = 1"
+        self.cursor.execute(sql_query)
+        self.conn.commit()
+
+    def find_cab(self, source, destination):
+        sql_query = f"""SELECT id,cab_number,seat_available,route,timing FROM cab_details
+                        WHERE route LIKE '%{source}%' AND route LIKE '%{destination}%'
+                        AND seat_available > 0
+                    """
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        return result
+
+    def update_seat_availability(self, id, num):
+        sql_query = f"""SELECT seat_available FROM cab_details
+                        WHERE id = '{id}'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        seat_count = [value[0] for value in result]
+        seat_count_updated = seat_count[0] + num
+        sql_query2 = f"""UPDATE cab_details SET seat_available = '{seat_count_updated}'
+                        WHERE id = '{id}'"""
+        self.cursor.execute(sql_query2)
+        self.conn.commit()
+
+    def insert_travel_log(self, dict):
+        sql_query = f"""INSERT INTO travel_log ('employee_id','cab_id','trip_date','source',
+                        'destination','timing','status') VALUES ('{dict['emp_id']}','{dict['cab_id']}',
+                        '{dict['trip_date']}','{dict['source']}','{dict['destination']}',
+                        '{dict['timing']}','{dict['status']}')"""
+        self.cursor.execute(sql_query)
+        self.conn.commit()
+
+    def find_travel_time(self, loc1, loc2):
+        sql_query = f"""SELECT time FROM trip_time WHERE
+                        source LIKE '{loc1}' AND destination LIKE '{loc2}' OR
+                        source LIKE '{loc2}' AND destination LIKE '{loc1}'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        time = [value[0] for value in result]
+        return time[0]
+
+    def get_travel_history(self, id):
+        sql_query = f"""SELECT cab_number,trip_date,x.timing,source,destination,status 
+                        FROM travel_log x JOIN cab_details y ON x.cab_id = y.id
+                        WHERE employee_id = '{id}'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        return result
+
+    def update_ride_status(self, id, prev_status, current_status):
+        sql_query = f"""UPDATE travel_log SET status = '{current_status}' WHERE
+                        id = '{id}' AND status LIKE '{prev_status}'"""
+        self.cursor.execute(sql_query)
+        self.conn.commit()
+
+    def already_booked_status(self, id):
+        sql_query = f"""SELECT * FROM travel_log WHERE employee_id = '{id}' AND
+                        status LIKE 'upcoming' OR status LIKE 'started'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        if not result:
+            return False
+        else:
+            return True
+
+    def get_trip_specifc_info(self, id, info):
+        sql_query = f"""SELECT {info} FROM travel_log WHERE employee_id='{id}' 
+                        AND status LIKE 'upcoming'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        required_data = [value[0] for value in result]
+        return required_data[0]
+
+    def check_cancelled_status(self, booking_id):
+        sql_query = f"""SELECT * FROM travel_log WHERE id='{booking_id}' AND status LIKE 'cancelled'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        if not result:
+            return False
+        else:
+            return True
+
+
