@@ -189,7 +189,7 @@ class Database:
 
     def schedule_trip(self, trip_start_time, id, source, destination, booking_id):
         # start_trip_task = Timer(trip_start_time, self.start_trip, [str(id), source, destination,booking_id])
-        # For demonstration purpose
+        # For demonstration purpose using 10 seconds till the trip start
         start_trip_task = Timer(10, self.start_trip, [id, source, destination, booking_id])
         start_trip_task.start()
 
@@ -220,7 +220,7 @@ class Database:
         trip_time_seconds = time[0] * 60
 
         # end_trip_task = Timer(trip_time_seconds, self.start_trip, [str(id), source, destination])
-        # For demonstration purpose
+        # For demonstration purpose using 10 seconds till the trip ends
         end_trip_task = Timer(10, self.end_trip, [id])
         end_trip_task.start()
 

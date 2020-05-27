@@ -56,6 +56,13 @@ class Employee():
         source = locations[source_input]
         destination = locations[destination_input]
         time_input = input('Enter time: ')
+        t1 = datetime.strptime(time_input, '%H:%M')
+        current_time = datetime.now()
+        current_time_string = current_time.strftime("%H:%M")
+        t2 = datetime.strptime(current_time_string, '%H:%M')
+        if t1 < t2 :
+            print('\nEntered time should be greater than current time\n')
+            return
         available_cabs = self.db.find_cab(source, destination)
         available_cabs = self.filter_cab_by_timings(available_cabs, time_input)
         if available_cabs == []:
@@ -80,11 +87,8 @@ class Employee():
         self.db.insert_travel_log(travel_info_dict)
         booking_id = self.db.get_trip_specifc_info(id, 'id')
         print(f'\nYour ride is confirmed from {source} to {destination} at {time_input}\n')
+
         #Function waiting for trip to start
-        t1 = datetime.strptime(time_input, '%H:%M')
-        current_time = datetime.now()
-        current_time_string = current_time.strftime("%H:%M")
-        t2 = datetime.strptime(current_time_string, '%H:%M')
         trip_start_time = (t1 - t2).total_seconds()
         self.db.schedule_trip(trip_start_time, id, source, destination, booking_id)
 
