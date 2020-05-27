@@ -1,5 +1,7 @@
 import time
 from model.employee import Employee
+from tabulate import tabulate
+
 
 class Admin:
     def __init__(self, db, user):
@@ -25,7 +27,7 @@ class Admin:
                 '3: Add a cab\n4: Update cab details\n5: Add/Update/Delete Employee\n'
                 '6: Logout\nEnter your choice : ')
             if n == '1':
-                self.check_table_booking()
+                self.check_total_booking()
             elif n == '2':
                 self.check_employee_booking()
             elif n == '3':
@@ -41,11 +43,53 @@ class Admin:
         print("\nLogging out!!\n")
         time.sleep(.5)
 
-    def check_table_booking(self):
-        print('Check Table Booking')
+    def check_total_booking(self):
+        date = input('\nEnter the date in DD-MM-YYYY format: ')
+        while True:
+            try:
+                n = int(input('\n1: See booking records date-wise\n2: See booking records week-wise'
+                              '\n3: See booking records month-wise\nEnter your choice: '))
+                break
+            except:
+                print("\n***Only numbers are allowed***\n")
+        if n == 1 :
+            record = self.db.get_record_datewise(date)
+        elif n == 2 :
+            week_dict = {1: ('01', '02', '03', '04', '05', '06', '07'),
+                         2: ('08', '09', '10', '11', '12', '13', '14'),
+                         3: ('15', '16', '17', '18', '19', '20', '21'),
+                         4: ('22', '23', '24', '25', '27', '28', '29'),
+                         5: ('30', '31')}
+            week_number = int(int(date[:2]) / 7) + 1
+            week_list = week_dict[week_number]
+            record = self.db.get_record_weekwise(date[3:], week_list)
+        elif n == 3 :
+            record = self.db.get_record_monthwise(date[3:])
+
+        if record == []:
+            print('\nNo Travel History Found\n')
+            return
+        print('\n' + tabulate(record, headers=['Cab Number', 'Trip Date', 'Time',
+                                                       'Source Location', 'Destination', 'Status'],
+                              tablefmt='orgtbl') + '\n')
 
     def check_employee_booking(self):
-        print('Employee Booking')
+        while True:
+            try:
+                employee_id = int(input('\nEnter the employee ID: '))
+                break
+            except:
+                print("\n***Only numbers are allowed***\n")
+        if not self.db.validate_record_existence(employee_id, 'employee_details'):
+            print(f'\nNo employee found from id -> {employee_id}\n')
+            return
+        travel_history = self.db.get_travel_history(employee_id)
+        if travel_history == []:
+            print('\nNo Travel History Found\n')
+            return
+        print('\n' + tabulate(travel_history, headers=['Cab Number', 'Trip Date', 'Time',
+                                                       'Source Location', 'Destination', 'Status'],
+                              tablefmt='orgtbl') + '\n')
 
     def add_cab(self):
         cab_detail_dict = self.input_cab_details()
@@ -56,7 +100,7 @@ class Admin:
     def update_cab_details(self):
         while True:
             try:
-                cab_id = int(input('Enter the cab ID of the cab you want to update details'))
+                cab_id = int(input('Enter the cab ID of the cab you want to update details: '))
                 break
             except:
                 print("\n***Only numbers are allowed***\n")

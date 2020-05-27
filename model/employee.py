@@ -133,6 +133,7 @@ class Employee():
         travel_history = self.db.get_travel_history(id)
         if travel_history == [] :
             print('\nNo Travel History Found\n')
+            return
         print('\n' + tabulate(travel_history, headers=['Cab Number', 'Trip Date', 'Time',
                         'Source Location', 'Destination','Status'], tablefmt='orgtbl') + '\n')
 
