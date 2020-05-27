@@ -2,6 +2,7 @@ import sqlite3
 from sqlite3 import Error
 from database.db_model import RECORD_TABLE
 from threading import Timer
+import sys
 
 class Database:
     def __init__(self):
@@ -12,7 +13,7 @@ class Database:
 
         #Creates the instance of the database connection
         try:
-            self.conn = sqlite3.connect('database.db')
+            self.conn = sqlite3.connect('database.db', check_same_thread=False)
             self.cursor = self.conn.cursor()
             print("Opened database successfully")
         except sqlite3.Error:
@@ -192,56 +193,22 @@ class Database:
         # For demonstration purpose using 10 seconds till the trip start
         start_trip_task = Timer(10, self.start_trip, [id, source, destination, booking_id])
         start_trip_task.start()
+        # start_trip_task.cancel()
 
     def start_trip(self, cab_id, source, destination, booking_id):
-        self.conn = sqlite3.connect('database.db')
-        self.cursor = self.conn.cursor()
-        sql_query = f"""SELECT * FROM travel_log WHERE id='{booking_id}' AND status LIKE 'cancelled'"""
-        self.cursor.execute(sql_query)
-        result = self.cursor.fetchall()
-        if not result:
-            cancelled_status = False
-        else:
-            cancelled_status = True
+        cancelled_status = self.check_cancelled_status(booking_id)
         if cancelled_status:
             return
-
-        sql_query2 = f"""UPDATE travel_log SET status = 'started' WHERE
-                                id = {booking_id} AND status LIKE 'upcoming'"""
-        self.cursor.execute(sql_query2)
-        self.conn.commit()
-
-        sql_query3 = f"""SELECT time FROM trip_time WHERE
-                                source LIKE '{source}' AND destination LIKE '{destination}' OR
-                                source LIKE '{destination}' AND destination LIKE '{source}'"""
-        self.cursor.execute(sql_query3)
-        result = self.cursor.fetchall()
-        time = [value[0] for value in result]
-        trip_time_seconds = time[0] * 60
-
+        self.update_ride_status(booking_id, "upcoming", "started")
+        trip_time_seconds = self.find_travel_time(source, destination) * 60
         # end_trip_task = Timer(trip_time_seconds, self.start_trip, [str(id), source, destination])
         # For demonstration purpose using 10 seconds till the trip ends
         end_trip_task = Timer(10, self.end_trip, [booking_id, cab_id])
         end_trip_task.start()
 
     def end_trip(self, booking_id, cab_id):
-        self.conn = sqlite3.connect('database.db')
-        self.cursor = self.conn.cursor()
-        sql_query = f"""UPDATE travel_log SET status = 'ended' WHERE
-                                id = '{booking_id}' AND status LIKE 'started'"""
-        self.cursor.execute(sql_query)
-        self.conn.commit()
-
-        sql_query2 = f"""SELECT seat_available FROM cab_details
-                                WHERE id = '{cab_id}'"""
-        self.cursor.execute(sql_query2)
-        result = self.cursor.fetchall()
-        seat_count = [value[0] for value in result]
-        seat_count_updated = seat_count[0] + 1
-        sql_query3 = f"""UPDATE cab_details SET seat_available = '{seat_count_updated}'
-                                WHERE id = '{cab_id}'"""
-        self.cursor.execute(sql_query3)
-        self.conn.commit()
+        self.update_ride_status(booking_id, "started", "ended")
+        self.update_seat_availability(cab_id, 1)
 
 
 
