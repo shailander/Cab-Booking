@@ -4,7 +4,7 @@ from model.employee import Employee
 import sys
 
 class User() :
-    def main_dashboard(self,db,user):
+    def main_dashboard(self, db, user):
         print('Welcome to Cab Booking Service!!\nLogin as :\n1 : Admin\n2 : Employee\n3 : Exit')
         while True:
             try:
@@ -29,4 +29,4 @@ if __name__ == "__main__":
 
     user = User()
     while(True) :
-        user.main_dashboard(db,user)
+        user.main_dashboard(db, user)

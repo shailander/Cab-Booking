@@ -50,7 +50,7 @@ class Employee():
                 break
             except:
                 print('\n*Only numbers is allowed*\n')
-        if source_input and destination_input not in locations.keys():
+        if source_input not in locations.keys() or destination_input not in locations.keys():
             print('\nWrong Location input\n')
             return
         source = locations[source_input]
@@ -132,12 +132,18 @@ class Employee():
         current_time = datetime.now()
         current_time_string = current_time.strftime("%H:%M")
         t2 = datetime.strptime(current_time_string, '%H:%M')
-        if (t1 - t2).total_seconds() / 60 < 30 :
+        print(t2)
+        if self.calculate_minutes(t1, t2):
             print('\n**You can only cancel the booking prior 30 minutes of the scheduled time**\n')
             return
         self.db.update_ride_status(id, 'upcoming', 'cancelled')
         print('\nBooking cancelled successfully\n')
 
+    def calculate_minutes(self, t1, t2) :
+        if (t1 - t2).total_seconds() / 60 < 30 :
+            return True
+        else:
+            return False
 
     def create_member(self):
         member_dict = self.input_member_details()
