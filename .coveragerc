@@ -1,0 +1,8 @@
+[run]
+omit=  /home/nineleaps/PycharmProjects/Cab Booking/venv/*,/home/nineleaps/PycharmProjects/Cab Booking/tests/*
+
+
+[report]
+
+exclude_lines =
+    if __name__ == .__main__.:

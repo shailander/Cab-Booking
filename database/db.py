@@ -51,7 +51,7 @@ class Database:
         name = [value[0] for value in result]
         return name[0]
 
-    def insert_cab_deatils(self, dict):
+    def insert_cab_details(self, dict):
         sql_query = f"INSERT INTO cab_details ('cab_number','seat_capacity','seat_available','route'," \
                     f"'timing') VALUES ('{dict['cab_number']}','{dict['seat_capacity']}'," \
                     f"'{dict['seat_available']}','{dict['route']}','{dict['timing']}')"

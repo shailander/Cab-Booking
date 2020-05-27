@@ -93,7 +93,7 @@ class Admin:
 
     def add_cab(self):
         cab_detail_dict = self.input_cab_details()
-        self.db.insert_cab_deatils(cab_detail_dict)
+        self.db.insert_cab_details(cab_detail_dict)
         print('\nNew cab details entered successfully\n')
 
 
@@ -108,7 +108,7 @@ class Admin:
             print(f'No cab found from id -> {cab_id}')
             return
         cab_detail_dict = self.input_cab_details()
-        self.db.update_deatils(cab_id, cab_detail_dict, 'cab_details')
+        self.db.update_details(cab_id, cab_detail_dict, 'cab_details')
         print('\nCab details updated successfully\n')
 
     def input_cab_details(self):
@@ -155,4 +155,5 @@ class Admin:
             elif user_choice == '3' :
                 self.employee.delete_member()
             else :
+                print('')
                 break
