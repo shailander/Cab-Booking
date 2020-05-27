@@ -165,7 +165,7 @@ class Database:
             return True
 
     def get_record_datewise(self, date):
-        sql_query = f"""SELECT cab_number,trip_date,x.timing,source,destination,status 
+        sql_query = f"""SELECT employee_id,cab_number,trip_date,x.timing,source,destination,status 
                         FROM travel_log x JOIN cab_details y ON x.cab_id = y.id
                         WHERE x.trip_date = '{date}'"""
         self.cursor.execute(sql_query)
@@ -173,7 +173,7 @@ class Database:
         return result
 
     def get_record_weekwise(self, date, week_list):
-        sql_query = f"""SELECT cab_number,trip_date,x.timing,source,destination,status 
+        sql_query = f"""SELECT employee_id,trip_date,x.timing,source,destination,status 
                                 FROM travel_log x JOIN cab_details y ON x.cab_id = y.id
                                 WHERE SUBSTR(trip_date,4,7) LIKE '{date}' AND SUBSTR(trip_date,1,2) IN {week_list}"""
         self.cursor.execute(sql_query)
@@ -181,7 +181,7 @@ class Database:
         return result
 
     def get_record_monthwise(self, date):
-        sql_query = f"""SELECT cab_number,trip_date,x.timing,source,destination,status 
+        sql_query = f"""SELECT employee_id,cab_number,trip_date,x.timing,source,destination,status 
                                         FROM travel_log x JOIN cab_details y ON x.cab_id = y.id
                                         WHERE SUBSTR(trip_date,4,7) LIKE '{date}'"""
         self.cursor.execute(sql_query)

@@ -69,7 +69,7 @@ class Admin:
         if record == []:
             print('\nNo Travel History Found\n')
             return
-        print('\n' + tabulate(record, headers=['Cab Number', 'Trip Date', 'Time',
+        print('\n' + tabulate(record, headers=['Employee ID','Cab Number', 'Trip Date', 'Time',
                                                        'Source Location', 'Destination', 'Status'],
                               tablefmt='orgtbl') + '\n')
 
