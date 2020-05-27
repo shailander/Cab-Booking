@@ -1,6 +1,7 @@
 import sqlite3
 from sqlite3 import Error
 from database.db_model import RECORD_TABLE
+from threading import Timer
 
 class Database:
     def __init__(self):
@@ -186,4 +187,48 @@ class Database:
         result = self.cursor.fetchall()
         return result
 
+    def schedule_trip(self, trip_start_time, id, source, destination, booking_id):
+        # start_trip_task = Timer(trip_start_time, self.start_trip, [str(id), source, destination,booking_id])
+        # For demonstration purpose
+        start_trip_task = Timer(10, self.start_trip, [id, source, destination, booking_id])
+        start_trip_task.start()
+
+    def start_trip(self, id, source, destination, booking_id):
+        self.conn = sqlite3.connect('database.db')
+        self.cursor = self.conn.cursor()
+        sql_query = f"""SELECT * FROM travel_log WHERE id='{booking_id}' AND status LIKE 'cancelled'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        if not result:
+            cancelled_status = False
+        else:
+            cancelled_status = True
+        if cancelled_status:
+            return
+
+        sql_query = f"""UPDATE travel_log SET status = 'started' WHERE
+                                id = {id} AND status LIKE 'upcoming'"""
+        self.cursor.execute(sql_query)
+        self.conn.commit()
+
+        sql_query = f"""SELECT time FROM trip_time WHERE
+                                source LIKE '{source}' AND destination LIKE '{destination}' OR
+                                source LIKE '{destination}' AND destination LIKE '{source}'"""
+        self.cursor.execute(sql_query)
+        result = self.cursor.fetchall()
+        time = [value[0] for value in result]
+        trip_time_seconds = time[0] * 60
+
+        # end_trip_task = Timer(trip_time_seconds, self.start_trip, [str(id), source, destination])
+        # For demonstration purpose
+        end_trip_task = Timer(10, self.end_trip, [id])
+        end_trip_task.start()
+
+    def end_trip(self, id):
+        self.conn = sqlite3.connect('database.db')
+        self.cursor = self.conn.cursor()
+        sql_query = f"""UPDATE travel_log SET status = 'ended' WHERE
+                                id = '{id}' AND status LIKE 'started'"""
+        self.cursor.execute(sql_query)
+        self.conn.commit()
 

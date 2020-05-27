@@ -1,7 +1,6 @@
 import time
 from tabulate import tabulate
 from datetime import date, datetime
-from threading import Timer
 
 class Employee():
     def __init__(self, db, user):
@@ -88,24 +87,6 @@ class Employee():
         t2 = datetime.strptime(current_time_string, '%H:%M')
         trip_start_time = (t1 - t2).total_seconds()
         self.db.schedule_trip(trip_start_time, id, source, destination, booking_id)
-        # start_trip_task = Timer(trip_start_time, self.start_trip, [str(id), source, destination,booking_id])
-        # For demonstration purpose
-        start_trip_task = Timer(10, self.start_trip, [str(id), source, destination, booking_id])
-        start_trip_task.start()
-
-    def start_trip(self, id, source, destination, booking_id):
-        cancelled_status = self.check_cancelled_status(booking_id)
-        if cancelled_status:
-            return
-        self.update_ride_status(int(id), "upcoming", "started")
-        trip_time_seconds = self.find_travel_time(source, destination) * 60
-        # end_trip_task = Timer(trip_time_seconds, self.start_trip, [str(id), source, destination])
-        # For demonstration purpose
-        end_trip_task = Timer(10, self.end_trip, id)
-        end_trip_task.start()
-
-    def end_trip(self, id):
-        self.update_ride_status(int(id), "started", "ended")
 
     def filter_cab_by_timings(self, cabs_list, time_input) :
         if cabs_list == [] :
