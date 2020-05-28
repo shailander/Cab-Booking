@@ -69,8 +69,9 @@ These credentials should be provided to get access inside the Employee panel.
 ### Setup CRON job to send daily update at 11:00 PM to the Admin
 ```
 1. Add your email id and passowrd in `email_user` and `email_password`, email id of the receiver in `email_send` in the send_daily_mail.py file.
-2. Run `crontab -e` in the terminal
-3. Add command `0 23 * * * python3 [path to the project]/CabBooking/send_daily_mail.py` to the bottom of the file.
+2. If your 2-step verification is on, use application passowrd instead of mail password.
+3. Run `crontab -e` in the terminal
+4. Add command `0 23 * * * python3 [path to the project]/CabBooking/send_daily_mail.py` to the bottom of the file.
 
 ```
 ###Key Entities in Code
