@@ -5,11 +5,20 @@ from tabulate import tabulate
 
 class Admin:
     def __init__(self, db, user):
+        """
+        Initialising database and User
+        :param db:
+        :param user:
+        """
         self.db = db
         self.user = user
         self.employee = Employee(db, user)
 
     def login(self):
+        """
+        Login validation and homescreen for Admin
+        :return:
+        """
         username = input("Enter username: ")
         password = input("Enter password: ")
         dict = {'username': username, 'password': password}
@@ -42,6 +51,10 @@ class Admin:
         time.sleep(.5)
 
     def check_total_booking(self):
+        """
+        Showing total booking record based on date, week, month
+        :return:
+        """
         date = input('\nEnter the date in DD-MM-YYYY format: ')
         while True:
             try:
@@ -72,6 +85,10 @@ class Admin:
                               tablefmt='orgtbl') + '\n')
 
     def check_employee_booking(self):
+        """
+        Check total booking record of a employee
+        :return:
+        """
         while True:
             try:
                 employee_id = int(input('\nEnter the employee ID: '))
@@ -90,12 +107,20 @@ class Admin:
                               tablefmt='orgtbl') + '\n')
 
     def add_cab(self):
+        """
+        Adding a new cab
+        :return:
+        """
         cab_detail_dict = self.input_cab_details()
         self.db.insert_cab_details(cab_detail_dict)
         print('\nNew cab details entered successfully\n')
 
 
     def update_cab_details(self):
+        """
+        Updating a cab details
+        :return:
+        """
         while True:
             try:
                 cab_id = int(input('Enter the cab ID of the cab you want to update details: '))
@@ -110,6 +135,10 @@ class Admin:
         print('\nCab details updated successfully\n')
 
     def input_cab_details(self):
+        """
+        Common function for getting the cab details from user
+        :return:
+        """
         cab_number = input('Enter cab number: ')
         while True:
             try:
@@ -143,6 +172,10 @@ class Admin:
                            'timing': timing[1:]}
 
     def crud_employee(self):
+        """
+        CRUD operations on employee
+        :return:
+        """
         while True:
             user_choice = input('\n1: Create Employee\n2: Update Employee\n3: Delete Employee\n'
                   'Any Other key to Exit\nEnter your choice: ')

@@ -5,6 +5,12 @@ import sys
 
 class User() :
     def main_dashboard(self, db, user):
+        """
+        Main Dashboard
+        :param db:
+        :param user:
+        :return:
+        """
         print('Welcome to Cab Booking Service!!\nLogin as :\n1 : Admin\n2 : Employee\n3 : Exit')
         while True:
             try:

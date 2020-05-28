@@ -4,10 +4,19 @@ from datetime import date, datetime
 
 class Employee():
     def __init__(self, db, user):
+        """
+        Initialising the database and user
+        :param db:
+        :param user:
+        """
         self.db = db
         self.user = user
 
     def login(self):
+        """
+        Login validation and homescreen for Employee
+        :return:
+        """
         username = input('Enter username: ')
         password = input('Enter password: ')
         dict = {'username': username, 'password': password}
@@ -36,6 +45,11 @@ class Employee():
         time.sleep(.5)
 
     def booking_cab(self, id):
+        """
+        Searching an booking a ride
+        :param id:
+        :return:
+        """
         already_booked_status = self.db.already_booked_status(id)
         if already_booked_status :
             print('\nAlready Booked or in a ride\n')
@@ -93,6 +107,12 @@ class Employee():
         self.db.schedule_trip(trip_start_time, cab_id_input, source, destination, booking_id)
 
     def filter_cab_by_timings(self, cabs_list, time_input) :
+        """
+        Filtering cab by the user inpput time
+        :param cabs_list:
+        :param time_input:
+        :return:
+        """
         if cabs_list == [] :
             return []
         updated_list = []
@@ -115,6 +135,11 @@ class Employee():
 
 
     def booking_history(self, id):
+        """
+        Get the booking history of the logged in user
+        :param id:
+        :return:
+        """
         travel_history = self.db.get_travel_history(id)
         if travel_history == [] :
             print('\nNo Travel History Found\n')
@@ -123,6 +148,11 @@ class Employee():
                         'Source Location', 'Destination','Status'], tablefmt='orgtbl') + '\n')
 
     def cancel_booking(self, id):
+        """
+        Cancel the booking
+        :param id:
+        :return:
+        """
         already_booked_status = self.db.already_booked_status(id)
         if not already_booked_status:
             print('\nYou have no upcoming ride to cancel\n')
@@ -140,17 +170,32 @@ class Employee():
         print('\nBooking cancelled successfully\n')
 
     def calculate_minutes(self, t1, t2) :
+        """
+        Calculate the status wheather a user can cancel the ride or not based on the time left
+        till the ride start(<30 min)
+        :param t1:
+        :param t2:
+        :return:
+        """
         if (t1 - t2).total_seconds() / 60 < 30 :
             return True
         else:
             return False
 
     def create_member(self):
+        """
+        Creating employee
+        :return:
+        """
         member_dict = self.input_member_details()
         self.db.create_employee_record(member_dict)
         print('\nEmployee created successfully\n')
 
     def update_member(self):
+        """
+        Update employee
+        :return:
+        """
         while True:
             try:
                 employee_id = int(input('\nEnter the employee id of the employee you want to update: '))
@@ -165,12 +210,20 @@ class Employee():
         print('\nEmployee created successfully\n')
 
     def input_member_details(self):
+        """
+        Common function for getting the employee details from user
+        :return:
+        """
         name = input('Enter employee name: ')
         username = input('Enter employee username: ')
         password = input('Enter employee password: ')
         return {'name': name, 'username': username, 'password': password}
 
     def delete_member(self):
+        """
+        Deleting the employee record(soft delete)
+        :return:
+        """
         while True:
             try:
                 employee_id = int(input('\nEnter the employee id of the employee you want to delete: '))
