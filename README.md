@@ -9,6 +9,7 @@ Assumptions
 1.This project consists of a single Admin.
 2.The time between two locations is provided beforehand for an employee to book a cab.
 3.If a employee source, destination and cab time lies in between a route and trip time of a cab respectively, the cab will pick it up irrespective of it's current location.
+4. For demonstaration process all the accepted ride will start in 10 seconds and will also end in 10 seconds. The real time required code is commented.
 ```
 ADMIN LOGIN
 ----
@@ -65,6 +66,13 @@ These credentials should be provided to get access inside the Employee panel.
 9. Run the following command for testing a specific file
      `python -m unittest test_case_directory/test_case_file_name.py`
 ```
+### Setup CRON job to send daily update at 11:00 PM to the Admin
+```
+1. Add your email id and passowrd in `email_user` and `email_password`, email id of the receiver in `email_send` in the send_daily_mail.py file.
+2. Run `crontab -e` in the terminal
+3. Add command `0 23 * * * python3 [path to the project]/CabBooking/send_daily_mail.py` to the bottom of the file.
+
+```
 ###Key Entities in Code
 ```
 +-- cab
@@ -83,4 +91,6 @@ These credentials should be provided to get access inside the Employee panel.
 |  +--main.py
 |  +--database.db
 |  +--.coveragerc
+|  +--data_visualization.py
+|  +--send_daily_mail.py
 ```
