@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import date
 
+DATABASE_PATH = "/home/nineleaps/PycharmProjects/CabBooking/database.db"
+
 class DataVisualization:
     def __init__(self):
         """
@@ -13,7 +15,7 @@ class DataVisualization:
 
         #Creates the instance of the database connection
         try:
-            self.conn = sqlite3.connect('/home/nineleaps/PycharmProjects/CabBooking/database.db')
+            self.conn = sqlite3.connect(DATABASE_PATH)
             self.cursor = self.conn.cursor()
             print("Opened database successfully")
         except sqlite3.Error:

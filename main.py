@@ -11,7 +11,7 @@ class User() :
         :param user:
         :return:
         """
-        print('Welcome to Cab Booking Service!!\nLogin as :\n1 : Admin\n2 : Employee\n3 : Exit')
+        print('Welcome to Cab Booking Service!!\nLogin as :\n1 : Admin\n2 : Employee\nAny Number : Exit')
         while True:
             try:
                 n = int(input('Enter your choice : '))

@@ -27,7 +27,7 @@ class Admin:
             print("Username/Password not matched")
             return
         name = self.db.get_name(dict, "Admin")
-        print(f"\nWelcome {name}\n")
+        print("\nWelcome {}\n".format(name))
         while True:
             n = input(
                 '\n1: Check total booking\n2: Check booking of an employee\n'

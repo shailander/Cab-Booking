@@ -1,7 +1,8 @@
 [run]
-omit=  /home/nineleaps/PycharmProjects/Cab Booking/venv/*,/home/nineleaps/PycharmProjects/Cab Booking/tests/*,
-           /home/nineleaps/PycharmProjects/Cab Booking/data_visualization.py,
-           /home/nineleaps/PycharmProjects/Cab Booking/send_daily_mail.py
+omit=  /home/nineleaps/PycharmProjects/CabBooking/venv/*,/home/nineleaps/PycharmProjects/CabBooking/tests/*,
+           /home/nineleaps/PycharmProjects/CabBooking/data_visualization.py,
+           /home/nineleaps/PycharmProjects/CabBooking/send_daily_mail.py,
+           /home/nineleaps/PycharmProjects/CabBooking/venvs/*
 
 
 [report]
